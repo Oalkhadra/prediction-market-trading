@@ -40,13 +40,13 @@ The strategy has been deployed in its current state since 2026-02-22 (earlier ve
 
 ![Cumulative P&L](results/plots/equity_curve.png)
 
-## Model Calibration
+### Model Calibration
 
 The model's predicted probabilities align closely with empirical outcomes across 15,187 out-of-sample markets. When the model assigns probability *p* to a bucket, it resolves YES approximately *p* of the time, across all probability bins.
 
 ![Model Calibration](results/plots/calibration.png)
 
-## Benchmark Comparison
+### Benchmark Comparison
 
 Every naive and baseline strategy yields negative returns over the same period. The model outperforms the best profitable baseline by **2.8x P&L** and **2.3x Sharpe**. The best profitable baseline uses the same underlying model to adjust forecasts, but trades every available forecast without selectivity, demonstrating trade selection and mispricing identification as critical as the model itself.
 
@@ -59,13 +59,13 @@ Every naive and baseline strategy yields negative returns over the same period. 
 
 ![Benchmark Comparison](results/plots/benchmark_comparison.png)
 
-## Parameter Robustness
+### Parameter Robustness
 
 A sweep of **66 parameter configurations** shows that **all are profitable**, with annualized Sharpe ratios ranging from 1.84 to 3.26. The chosen parameters rank #1 by composite score but sit in the center of the profitable region rather than on a boundary.
 
 ![Parameter Sensitivity](results/plots/parameter_sensitivity.png)
 
-## Monte Carlo Simulation
+### Monte Carlo Simulation
 
 25,000 forward paths simulated with conservative assumptions including win degradation (simulating edge decay and/or model degradation), daily exposure caps, and stop-loss triggers.
 
@@ -91,7 +91,7 @@ The strategy scales horizontally as Kalshi adds cities. New cities plug directly
 
 ## Tech Stack
 
-Python · XGBoost · Kalshi API · BigQuery · DigitalOcean VPS
+Python · XGBoost · Kalshi API · BigQuery · VPS
 
 ---
 
