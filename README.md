@@ -95,4 +95,4 @@ Python · XGBoost · Kalshi API · BigQuery · VPS
 
 ---
 
-*Source code is private. For methodology details or questions, feel free to reach out.*
+*Source code is private due to live deployment; happy to walk through the full methodology in a technical discussion.*
