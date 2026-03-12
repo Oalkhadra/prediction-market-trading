@@ -82,6 +82,7 @@ A sweep of **66 parameter configurations** shows that **all are profitable**, wi
 
 ## Limitations
 
+- **Time Shifts:** Daylight Savings Time shifts the NWS observation window by one hour, which mainly affects early spring, as the maximum temperature can be observed near midnight. The current backtest does not account for this.
 - **Liquidity:** Kalshi temperature market volume ($10K–$150K per city-day) constrains scalability, especially for newer cities.
 - **Edge decay:** As markets attract more informed participants, the mispricings will likely compress.
 - **Execution:** Backtest uses historical ask prices + spread; live limit order fills may differ in thinner markets.
