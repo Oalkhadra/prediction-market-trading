@@ -10,7 +10,6 @@ This strategy trades binary outcome contracts by generating calibrated probabili
 ## Live Trading Performance
 
 The strategy has been deployed in its current state since 2026-02-22 (earlier versions have been trading since January).
-(Will be updated soon...)
 
 ### Performance Summary
 
