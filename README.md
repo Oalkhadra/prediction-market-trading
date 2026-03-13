@@ -47,7 +47,7 @@ The model's predicted probabilities align closely with empirical outcomes across
 
 ### Benchmark Comparison
 
-Every naive and baseline strategy yields negative returns over the same period. The model outperforms the best profitable baseline by **2.8x P&L** and **2.3x Sharpe**. The best profitable baseline uses the same underlying model to adjust forecasts, but trades every available forecast without selectivity, demonstrating trade selection and mispricing identification as critical as the model itself.
+Every naive and baseline strategy yields negative returns over the same period. The model outperforms the best profitable baseline by **2.0x P&L** and **1.7x Sharpe**. The best profitable baseline uses the same underlying model to adjust forecasts, but trades every available forecast without selectivity, demonstrating trade selection and mispricing identification as critical as the model itself.
 
 | Strategy | Trades | Win% | Total P&L | Sharpe | Max DD |
 |----------|--------|------|-----------|--------|--------|
