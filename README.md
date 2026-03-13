@@ -4,7 +4,7 @@
 
 Kalshi temperature markets consistently and systematically misprice the forecast uncertainty of maximum temperature outcomes. Analysis of 1,911 city-date observations reveals that market-implied uncertainty exceeds realized uncertainty by a factor of 1.27x.
 
-This strategy trades binary outcome contracts by generating calibrated probability estimates for each temperature bucket and comparing them against live market prices to identify mispriced positions across 10 U.S. cities. The probability model: A boosted decision tree, trained on 23 features derived from three independent weather data sources and Kalshi market microstructure, predicts the forecast error distribution for each city-date. 
+This strategy trades binary outcome contracts by generating calibrated probability estimates for each temperature bucket and comparing them against live market prices to identify mispriced positions across 10 U.S. cities. The probability model: A boosted decision tree, trained on 23 features derived from multiple independent weather data sources and Kalshi market microstructure, predicts the forecast error distribution for each city-date. 
 
 
 ## Live Trading Performance
