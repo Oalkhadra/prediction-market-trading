@@ -88,7 +88,7 @@ A sweep of **66 parameter configurations** shows that **all are profitable**, wi
 
 ## Scalability
 
-The strategy scales horizontally as Kalshi adds cities. New cities plug directly into the existing pipeline with no architectural changes. Minimum temperature markets (being added) and other prediction market platforms could further expand the opportunity set.
+The strategy scales horizontally as Kalshi adds cities. New cities plug directly into the existing pipeline with no architectural changes. Minimum temperature markets and other prediction market platforms could further expand the opportunity set. Polymarket currently has 82 cities, while Kalshi only hosts 21. Although, Polymarket is still unavailable in the U.S. for these markets.
 
 ## Tech Stack
 
