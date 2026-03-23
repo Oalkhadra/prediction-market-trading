@@ -4,13 +4,12 @@
 
 Kalshi temperature markets consistently and systematically misprice the forecast uncertainty of maximum temperature outcomes. Analysis of 1,911 city-date observations reveals that market-implied uncertainty exceeds realized uncertainty by a factor of 1.27x.
 
-This strategy trades binary outcome contracts by generating calibrated probability estimates for each temperature bucket and comparing them against live market prices to identify mispriced positions across 10 U.S. cities. The probability model: A boosted decision tree, trained on 23 features derived from three independent weather data sources and Kalshi market microstructure, predicts the forecast error distribution for each city-date. 
+This strategy trades binary outcome contracts by generating calibrated probability estimates for each temperature bucket and comparing them against live market prices to identify mispriced positions across 10 U.S. cities. The probability model: A boosted decision tree, trained on 23 features derived from multiple independent weather data sources and Kalshi market microstructure, predicts the forecast error distribution for each city-date. 
 
 
 ## Live Trading Performance
 
 The strategy has been deployed in its current state since 2026-02-22 (earlier versions have been trading since January).
-(Will be updated soon...)
 
 ### Performance Summary
 
@@ -48,7 +47,7 @@ The model's predicted probabilities align closely with empirical outcomes across
 
 ### Benchmark Comparison
 
-Every naive and baseline strategy yields negative returns over the same period. The model outperforms the best profitable baseline by **2.8x P&L** and **2.3x Sharpe**. The best profitable baseline uses the same underlying model to adjust forecasts, but trades every available forecast without selectivity, demonstrating trade selection and mispricing identification as critical as the model itself.
+Every naive and baseline strategy yields negative returns over the same period. The model outperforms the best profitable baseline by **2.0x P&L** and **1.7x Sharpe**. The best profitable baseline uses the same underlying model to adjust forecasts, but trades every available forecast without selectivity, demonstrating trade selection and mispricing identification as critical as the model itself.
 
 | Strategy | Trades | Win% | Total P&L | Sharpe | Max DD |
 |----------|--------|------|-----------|--------|--------|
@@ -83,13 +82,13 @@ A sweep of **66 parameter configurations** shows that **all are profitable**, wi
 ## Limitations
 
 - **Time Shifts:** Daylight Savings Time shifts the NWS observation window by one hour, which mainly affects early spring, as the maximum temperature can be observed near midnight. The current backtest does not account for this.
-- **Liquidity:** Kalshi temperature market volume ($10K–$150K per city-day) constrains scalability, especially for newer cities.
+- **Liquidity:** Kalshi temperature market volume, ranging between $10K–$500K per city per day (variable), constrains scalability, especially for newer cities.
 - **Edge decay:** As markets attract more informed participants, the mispricings will likely compress.
 - **Execution:** Backtest uses historical ask prices + spread; live limit order fills may differ in thinner markets.
 
 ## Scalability
 
-The strategy scales horizontally as Kalshi adds cities. New cities plug directly into the existing pipeline with no architectural changes. Minimum temperature markets (being added) and other prediction market platforms could further expand the opportunity set.
+The strategy scales horizontally as Kalshi adds cities. New cities plug directly into the existing pipeline with no architectural changes. Minimum temperature markets and other prediction market platforms could further expand the opportunity set. Polymarket currently has 82 cities, while Kalshi only hosts 21. Although, Polymarket is still unavailable in the U.S. for these markets.
 
 ## Tech Stack
 
