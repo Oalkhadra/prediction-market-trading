@@ -58,9 +58,9 @@ Every naive and baseline strategy yields negative returns over the same period. 
 
 ![Benchmark Comparison](results/plots/benchmark_comparison.png)
 
-### Parameter Robustness
+### Trading Parameter Robustness
 
-A sweep of **66 parameter configurations** shows that **all are profitable**, with annualized Sharpe ratios ranging from 2.86 to 4.18. The chosen parameters rank #1 by composite score but sit in the center of the profitable region rather than on a boundary.
+A sweep of **66 parameter configurations** shows that **all are profitable**, with annualized Sharpe ratios ranging from 3.44 to 5.03. The chosen parameters rank #2 by composite score but sit near the center of the profitable region rather than on a boundary.
 
 ![Parameter Sensitivity](results/plots/parameter_sensitivity.png)
 
