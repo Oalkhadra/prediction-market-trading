@@ -56,6 +56,8 @@ Every naive and baseline strategy yields negative returns over the same period. 
 | Naive Forecast | 2,504 | 25.9% | $-787.95 | -7.0 | $-810.86 |
 | Random | 4,143 | 49.7% | $-905.35 | -6.96 | $-905.42 |
 
+![Benchmark Comparison](results/plots/benchmark_comparison.png)
+
 ### Statistical Evaluation
 
 **Distributional Calibration (PIT Test)**
@@ -72,8 +74,6 @@ The Diebold-Mariano (1995) test compares paired Brier scores between the model a
 |--------|-------------|--------------|---------|---------|
 | All Buckets | 0.128 | 0.124 | 4.17 | <0.001 |
 | Traded Buckets | 0.201 | 0.214 | −2.77 | 0.006 |
-
-![Benchmark Comparison](results/plots/benchmark_comparison.png)
 
 ### Trading Parameter Robustness
 
