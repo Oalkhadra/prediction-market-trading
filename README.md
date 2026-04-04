@@ -56,6 +56,23 @@ Every naive and baseline strategy yields negative returns over the same period. 
 | Naive Forecast | 2,504 | 25.9% | $-787.95 | -7.0 | $-810.86 |
 | Random | 4,143 | 49.7% | $-905.35 | -6.96 | $-905.42 |
 
+### Statistical Evaluation
+
+**Distributional Calibration (PIT Test)**
+
+The Probability Integral Transform (Diebold et al., 1998) assesses whether the model's predicted distributions match the true data-generating process. If calibrated, CDF(actual) should be uniformly distributed. The model's PIT histogram is approximately uniform with slight overdispersion (KS=0.033, N=4,929), indicating well-calibrated distributional forecasts.
+
+![PIT Histogram](results/plots/pit_histogram.png)
+
+**Predictive Accuracy (Diebold-Mariano Test)**
+
+The Diebold-Mariano (1995) test compares paired Brier scores between the model and market implied probabilities. On all buckets, the market is more accurate overall (DM=4.17, p<0.001, N=17,275). On traded buckets specifically, the model significantly outperforms the market (DM=−2.77, p=0.006, N=2,035), confirming that the trade selection mechanism identifies genuine mispricings rather than noise.
+
+| Subset | Model Brier | Market Brier | DM Stat | p-value |
+|--------|-------------|--------------|---------|---------|
+| All Buckets | 0.128 | 0.124 | 4.17 | <0.001 |
+| Traded Buckets | 0.201 | 0.214 | −2.77 | 0.006 |
+
 ![Benchmark Comparison](results/plots/benchmark_comparison.png)
 
 ### Trading Parameter Robustness
