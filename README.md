@@ -62,13 +62,13 @@ Every naive and baseline strategy yields negative returns over the same period. 
 
 **Distributional Calibration (PIT Test)**
 
-The Probability Integral Transform (Diebold et al., 1998) assesses whether the model's predicted distributions match the true data-generating process. If calibrated, CDF(actual) should be uniformly distributed. The model's PIT histogram is approximately uniform with slight overdispersion (KS=0.033, N=4,929), indicating well-calibrated distributional forecasts.
+The use of the Probability Integral Transform, following the evaluation framework of Diebold et al. (1998), assesses whether the model's predicted distributions match the true data-generating process. If calibrated, CDF(actual) should be uniformly distributed. The model's PIT histogram is approximately uniform with slight overdispersion (KS=0.033, indicating well-calibrated distributional forecasts.
 
 ![PIT Histogram](results/plots/pit_histogram.png)
 
 **Predictive Accuracy (Diebold-Mariano Test)**
 
-The Diebold-Mariano (1995) test compares paired Brier scores between the model and market implied probabilities. On all buckets, the market is more accurate overall (DM=4.17, p<0.001, N=17,275). On traded buckets specifically, the model significantly outperforms the market (DM=−2.77, p=0.006, N=2,035), confirming that the trade selection mechanism identifies genuine mispricings rather than noise.
+The Diebold-Mariano (1995) test compares paired Brier scores between the model and market implied probabilities. On all buckets, the market is more accurate overall (DM=4.17, p<0.001, N=17,275). On traded buckets specifically, the model significantly outperforms the market (DM=−2.77, p=0.006), confirming that the trade selection mechanism identifies genuine mispricings rather than noise.
 
 | Subset | Model Brier | Market Brier | DM Stat | p-value |
 |--------|-------------|--------------|---------|---------|
