@@ -11,7 +11,7 @@ Across 1,000+ settled trades, the system has a lifetime Sharpe of 2.0
 model version, deployed June 5, returned **+37.4% on deployed capital in its
 first month**, net of fees, and prices contracts measurably better than the
 market: **10.3% Brier skill** and **12× lower calibration error** against
-market-implied probabilities (details below).. 
+market-implied probabilities (details below). 
 
 
 ## Live Trading Performance
