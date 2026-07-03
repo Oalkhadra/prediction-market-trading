@@ -2,115 +2,132 @@
 
 ## Overview
 
-Kalshi temperature markets consistently and systematically misprice the forecast uncertainty of maximum temperature outcomes. Analysis of 1,911 city-date observations reveals that market-implied uncertainty exceeds realized uncertainty by a factor of 1.27x.
+Kalshi's daily maximum-temperature markets systematically misprice forecast
+uncertainty. This repository documents a fully autonomous trading system built
+against that mispricing. Live since February 22, 2026. (Metrics as of July 3rd, 2026)
 
-This strategy trades binary outcome contracts by generating calibrated probability estimates for each temperature bucket and comparing them against live market prices to identify mispriced positions across 10 U.S. cities. The probability model: A boosted decision tree, trained on 30 features derived from multiple independent weather data sources and Kalshi market microstructure, predicts the forecast error distribution for each city-date. 
+Across 1,000+ settled trades, the system has a lifetime Sharpe of 2.0
+(annualized from daily returns on deployed capital, net of fees). The current
+model version, deployed June 5, returned **+37.4% on deployed capital in its
+first month**, net of fees, and prices contracts measurably better than the
+market: **10.3% Brier skill** and **12× lower calibration error** against
+market-implied probabilities (details below).. 
 
 
 ## Live Trading Performance
 
-The strategy has been deployed in its current state since 2026-02-22 (earlier versions have been trading since January).
+*Settled trades only, P&L net of Kalshi fees. Data as of 2026-07-03, refreshed routinely.*
 
 ### Performance Summary (As of 2026-04-05)
 
-![Performance Summary](results/plots/performance_tab.png)
+![Performance Summary](results/plots/equity_curve_live_dark.png)
 
-### Model Diagnostics
+The vertical markers are two major strategy modifications: the risk layer
+(cost-aware selection + robust gates, late May) and the current pooled density
+model with ensemble-conditional σ (June 5). Everything to the right of a marker
+is out-of-sample for that version. Each improvement was synthesized and backtested on historical
+data.
 
-![Model Diagnostic](results/plots/diagnostics_tab.png)
 
+| Metric | Lifetime (since Feb 22) | Current model (since Jun 5) |
+|---|---|---|
+| Settled trades | 1,014 | 179 |
+| Net P&L (after fees) | +$1,519 | +$1,947 |
+| Return on risk | +11.7% | **+37.4%** |
+| Win rate (settled) | 30.4% | 43.6% |
+| Avg win / avg loss | 2.7× | 2.1× |
+| Profit factor | 1.17 | 1.62 |
+| Sharpe (annualized) | 2.0 | 6.83 |
 
-## Backtest Results (Out-of-Sample)
+*Sharpe is computed on daily returns over capital deployed that day, √365
+annualization; the current-model window is too short to annualize honestly.
+Lifetime fees paid: $488*
 
-**Period:** 2025-01-01 to 2026-02-20 | **Sizing:** $1 per trade | **Fees:** Kalshi fee formula + $0.02 spread assumption
+| Month | Settled | Net P&L | Win % |
+|---|---|---|---|
+| Feb | 56 | +$116 | 37.5% |
+| Mar | 219 | +$7 | 28.3% |
+| Apr | 245 | −$377 | 20.8% |
+| May | 296 | +$56 | 31.1% |
+| Jun | 189 | +$986 | 41.8% |
+| Jul | 9 | +$732 | 33.3% |
 
-| Metric | Value |
-|--------|-------|
-| Trades | 1012 |
-| Total Return | 49.8% |
-| Daily Sharpe (ann.) | 4.9 |
-| Max Drawdown | 5.6% |
-| Win Rate | 34.9% |
-| W/L Ratio | 3.2 |
-| Profit Factor | 1.72 |
-| Calmar Ratio | 15.1 |
+These are capacity-constrained retail markets: absolute P&L is small by
+construction, and the system is judged on forecast quality, cost-aware
+selection, and risk process rather than dollar totals.
 
-### Equity Curve
+### Model vs. market, measured live
 
-![Cumulative P&L](results/plots/equity_curve.png)
+The system snapshots every bucket of every city's market daily,
+traded or not, alongside the model's predicted distribution. Scoring model
+probabilities against market mid prices over the full live window
+(**10,757 bucket observations**, 129 days, 20 cities):
 
-### Model Calibration
+- **Brier skill score: +10.3%** vs. the market (Brier 0.091 vs. 0.102)
+- **Expected calibration error: 0.006 vs. 0.072 — 12× lower**, each forecaster
+  binned on its own probabilities (10 bins, count-weighted)
 
-The model's predicted probabilities align closely with empirical outcomes across 16,681 out-of-sample markets. When the model assigns probability *p* to a bucket, it resolves YES approximately *p* of the time, across all probability bins.
+![Model Calibration](results/plots/calibration_live_dark.png)
 
-![Model Calibration](results/plots/calibration.png)
+## Validation
 
-### Benchmark Comparison
+The model is retrained every day with a training window ending yesterday,
+both in production and development. Strategy changes are validated on a daily-retrain
+walk-forward backtest engine maintained in parity with the live trading code
+(selection, cost model, sizing) before any deployment. Nothing ships on
+static-fit results: several statically-promising features and distributional
+changes were rejected because their gains did not survive walk-forward
+evaluation.
 
-Every naive and baseline strategy yields negative returns over the same period. The model outperforms the best profitable baseline by **1.93x P&L** and **1.96x Sharpe**. The best profitable baseline uses the same underlying model to adjust forecasts, but trades every available forecast without selectivity, demonstrating trade selection and mispricing identification as critical as the model itself.
+Costs are modeled explicitly, the Kalshi taker fee and a limit-price slippage
+budget are netted from every candidate's edge before it is thresholded, and
+sizing prices at the realized fill price. Selection requires both a
+net-of-cost edge and a distributionally robust gate that shrinks the model
+probability toward the market price before applying a KL worst-case haircut
+(Lam 2016); sizing is robust Kelly under a daily exposure cap, with the
+ambiguity radius set from the forecaster's own calibration diagnostics. The
+live system logs fills, gate decisions, and PIT/coverage calibration drift
+daily.
 
-| Strategy | Trades | Win% | Total P&L | Sharpe | Max DD |
-|----------|--------|------|-----------|--------|--------|
-| **This Strategy** | 1,012 | 34.9% | $503.7 | 4.9 | $-29.36 |
-| Best Baseline | 2,547 | 48.4% | $261.0 | 2.5 | $-42.77 |
-| Naive Forecast | 2,504 | 25.9% | $-787.95 | -7.0 | $-810.86 |
-| Random | 4,143 | 49.7% | $-905.35 | -6.96 | $-905.42 |
+Earlier per-city model versions were validated with parameter sweeps and Monte
+Carlo stress tests before capital was deployed (Jan–Feb 2026); the pooled
+system deployed June 5 supersedes them. Full validation results will accompany
+a paper planned for fall 2026.
 
-![Benchmark Comparison](results/plots/benchmark_comparison.png)
+## System
 
-### Statistical Evaluation
+```mermaid
+flowchart LR
+  W[Multi-source NWP<br/>forecasts + ensembles] --> M
+  K[Kalshi market<br/>snapshots] --> M
+  M[Pooled XGBoost<br/>daily retrain] --> D[Student-t predictive<br/>distribution per bucket]
+  D --> S[Cost-aware selection<br/>+ robust gate]
+  S --> Z[Robust Kelly sizing<br/>daily exposure cap]
+  Z --> E[Limit-order<br/>execution]
+  E --> T[Telemetry: P&L, fills,<br/>calibration drift]
+  T -.-> M
+```
 
-**Distributional Calibration (PIT Test)**
+Python · XGBoost · SciPy · pandas · BigQuery + S3 data feeds · deployed on a
+VPS with daily automated execution. A six-tab Dash/Plotly dashboard
+(performance, model diagnostics, model internals, market diagnostics, trade
+diagnostics, daily snapshot) monitors the live system.
 
-The use of the Probability Integral Transform, following the evaluation framework of Diebold et al. (1998), assesses whether the model's predicted distributions match the true data-generating process. If calibrated, CDF(actual) should be uniformly distributed. The model's PIT histogram is approximately uniform with slight overdispersion (KS=0.033, indicating well-calibrated distributional forecasts.
+## Limitations & Disclosure
 
-![PIT Histogram](results/plots/pit_histogram.png)
+- **Observation windows:** Daylight Savings shifts the NWS observation window
+  by an hour, which mainly matters in early spring when the daily high can
+  print near midnight.
+- **Liquidity:** Kalshi temperature volume ($10K–$500K per city-day, variable)
+  constrains position size and scalability; the system scales horizontally as
+  platforms add cities rather than vertically in existing books.
+- **Edge decay:** As these markets attract informed participants, the
+  mispricing should compress; the live record above is the relevant evidence,
+  not a guarantee.
+- **Execution:** Fills cross the spread with a slippage budget; results in
+  thinner books may differ from the record above.
 
-**Predictive Accuracy (Diebold-Mariano Test)**
-
-The Diebold-Mariano (1995) test compares paired Brier scores between the model and market implied probabilities. On all buckets, the market is more accurate overall (DM=4.17, p<0.001, N=17,275). On traded buckets specifically, the model significantly outperforms the market (DM=−2.77, p=0.006), confirming that the trade selection mechanism identifies genuine mispricings rather than noise.
-
-| Subset | Model Brier | Market Brier | DM Stat | p-value |
-|--------|-------------|--------------|---------|---------|
-| All Buckets | 0.128 | 0.124 | 4.17 | <0.001 |
-| Traded Buckets | 0.201 | 0.214 | −2.77 | 0.006 |
-
-### Trading Parameter Robustness
-
-A sweep of **66 parameter configurations** shows that **all are profitable**, with annualized Sharpe ratios ranging from 3.44 to 5.03. The chosen parameters rank #2 by composite score but sit near the center of the profitable region rather than on a boundary.
-
-![Parameter Sensitivity](results/plots/parameter_sensitivity.png)
-
-### Monte Carlo Simulation
-
-25,000 forward paths simulated with conservative assumptions including win degradation (5% flip probability, simulating edge decay and/or model degradation), daily exposure caps, and stop-loss triggers.
-
-| Metric | Value |
-|--------|-------|
-| Median Sharpe (ann.) | 3.16 |
-| Profitable Paths | 99.1% |
-| Mean Max Drawdown | 7.5% |
-| Stop Loss Hit | 0.9% |
-
-![Monte Carlo Simulation](results/plots/monte_carlo_equity.png)
-
-![Monte Carlo Distributions](results/plots/monte_carlo_distributions.png)
-
-## Limitations
-
-- **Time Shifts:** Daylight Savings Time shifts the NWS observation window by one hour, which mainly affects early spring, as the maximum temperature can be observed near midnight. The current backtest does not account for this.
-- **Liquidity:** Kalshi temperature market volume, ranging between $10K–$500K per city per day (variable), constrains scalability, especially for newer cities.
-- **Edge decay:** As markets attract more informed participants, the mispricings will likely compress.
-- **Execution:** Backtest uses historical ask prices + spread; live limit order fills may differ in thinner markets.
-
-## Scalability
-
-The strategy scales horizontally as Kalshi adds cities. New cities plug directly into the existing pipeline with no architectural changes. Minimum temperature markets and other prediction market platforms could further expand the opportunity set. Polymarket currently has 82 cities, while Kalshi only hosts 21. Although, Polymarket is still unavailable in the U.S. for these markets.
-
-## Tech Stack
-
-Python · XGBoost · Kalshi API · BigQuery · VPS
-
----
-
-*Source code is private due to live deployment; happy to walk through the full methodology in a technical discussion.*
+Production thresholds, parameter values, and execution scheduling are
+intentionally withheld; the results above are insensitive to them. Source code
+is private due to live deployment. I'd be happy to walk through the full methodology
+in a technical discussion.
