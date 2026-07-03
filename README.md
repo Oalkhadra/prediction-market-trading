@@ -37,7 +37,7 @@ data.
 | Win rate (settled) | 30.4% | 43.6% |
 | Avg win / avg loss | 2.7× | 2.1× |
 | Profit factor | 1.17 | 1.62 |
-| Sharpe (annualized) | 2.0 | 6.83 |
+| Sharpe (annualized) | 2.0 | - |
 
 *Sharpe is computed on daily returns over capital deployed that day, √365
 annualization; the current-model window is too short to annualize honestly.
