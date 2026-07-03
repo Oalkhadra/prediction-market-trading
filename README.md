@@ -18,7 +18,7 @@ market-implied probabilities (details below)..
 
 *Settled trades only, P&L net of Kalshi fees. Data as of 2026-07-03, refreshed routinely.*
 
-### Performance Summary (As of 2026-04-05)
+### Performance Summary
 
 ![Performance Summary](results/plots/equity_curve_live_dark.png)
 
