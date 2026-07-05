@@ -4,19 +4,19 @@
 
 Kalshi's daily maximum-temperature markets systematically misprice forecast
 uncertainty. This repository documents a fully autonomous trading system built
-against that mispricing. Live since February 22, 2026. (Metrics as of July 3rd, 2026)
+against that mispricing. Live since February 22, 2026. (Metrics as of July 4th, 2026)
 
-Across 1,000+ settled trades, the system has a lifetime Sharpe of 2.0
+Across 1,000+ settled trades, the system has a lifetime Sharpe of 2.2
 (annualized from daily returns on deployed capital, net of fees). The current
-model version, deployed June 5, returned **+37.4% on deployed capital in its
+model version, deployed June 5, returned **+39.1% on deployed capital in its
 first month**, net of fees, and prices contracts measurably better than the
 market: **10.3% Brier skill** and **12× lower calibration error** against
-market-implied probabilities (details below).. 
+market-implied probabilities (details below).
 
 
 ## Live Trading Performance
 
-*Settled trades only, P&L net of Kalshi fees. Data as of 2026-07-03, refreshed routinely.*
+*Settled trades only, P&L net of Kalshi fees. Data as of 2026-07-04, refreshed routinely.*
 
 ### Performance Summary
 
@@ -31,17 +31,17 @@ data.
 
 | Metric | Lifetime (since Feb 22) | Current model (since Jun 5) |
 |---|---|---|
-| Settled trades | 1,014 | 179 |
-| Net P&L (after fees) | +$1,519 | +$1,947 |
-| Return on risk | +11.7% | **+37.4%** |
-| Win rate (settled) | 30.4% | 43.6% |
-| Avg win / avg loss | 2.7× | 2.1× |
-| Profit factor | 1.17 | 1.62 |
-| Sharpe (annualized) | 2.0 | 6.83 |
+| Settled trades | 1,038 | 203 |
+| Net P&L (after fees) | +$1,817 | +$2,245 |
+| Return on risk | +13.4% | **+39.1%** |
+| Win rate (settled) | 30.3% | 41.4% |
+| Avg win / avg loss | 2.7× | 2.3× |
+| Profit factor | 1.19 | 1.65 |
+| Sharpe (annualized) | 2.2 | — |
 
 *Sharpe is computed on daily returns over capital deployed that day, √365
 annualization; the current-model window is too short to annualize honestly.
-Lifetime fees paid: $488*
+Lifetime fees paid: $504*
 
 | Month | Settled | Net P&L | Win % |
 |---|---|---|---|
@@ -50,7 +50,7 @@ Lifetime fees paid: $488*
 | Apr | 245 | −$377 | 20.8% |
 | May | 296 | +$56 | 31.1% |
 | Jun | 189 | +$986 | 41.8% |
-| Jul | 9 | +$732 | 33.3% |
+| Jul | 33 | +$1,030 | 27.3% 
 
 These are capacity-constrained retail markets: absolute P&L is small by
 construction, and the system is judged on forecast quality, cost-aware
