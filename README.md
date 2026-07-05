@@ -21,11 +21,7 @@ market-implied probabilities (details below).
 
 ![Performance Summary](results/plots/equity_curve_live_dark.png)
 
-The vertical markers are two major strategy modifications: the risk layer
-(cost-aware selection + robust gates, late May) and the current pooled density
-model with ensemble-conditional σ (June 5). Everything to the right of a marker
-is out-of-sample for that version. Each improvement was synthesized and backtested on historical
-data.
+The dashed marker is the deployment of the current density model (V2, live since June 5); bars are daily settled P&L. Shaded bands are days with a partial data-source outage upstream; the system continues trading on its remaining feeds. Since May 1, an outage automatically cuts position sizing to a small fraction of normal exposure; the April drawdown coincided with a cluster of outage days that predated that safeguard.
 
 
 | Metric | Lifetime (since Feb 22) | Current model (since Jun 5) |
